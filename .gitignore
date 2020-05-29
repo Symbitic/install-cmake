@@ -1,0 +1,12 @@
+node_modules
+*.log
+token.txt
+*.vsix
+*.zip
+.taskkey
+.vscode
+*.tgz
+build
+tmp
+__tests__/temp-get-ninja
+__tests__/temp-get-cmake

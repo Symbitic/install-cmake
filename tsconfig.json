@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "sourceMap": true,
+        "strict": true,
+        "rootDir": "./src",
+        "outDir": "./build"
+    },
+    "exclude": [
+        "node_modules",
+        "build",
+        "tmp",
+        "**/*.test.ts"
+    ]
+}

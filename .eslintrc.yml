@@ -1,0 +1,29 @@
+---
+root: true
+env:
+    node: true
+    jest: true
+parserOptions:
+    ecmaVersion: 2020
+    project: "./tsconfig.json"
+    sourceType: module
+extends:
+    - eslint:recommended
+    - plugin:@typescript-eslint/eslint-recommended
+    - plugin:@typescript-eslint/recommended
+    - plugin:import/errors
+    - plugin:import/warnings
+    - plugin:import/typescript
+    - plugin:prettier/recommended
+    - prettier/@typescript-eslint
+plugins:
+    - "@typescript-eslint"
+    - "jest"
+rules:
+    no-console: off
+    linebreak-style:
+        - error
+        - unix
+    prefer-const: error
+    "@typescript-eslint/no-floating-promises": error
+    "@typescript-eslint/no-var-requires": off
