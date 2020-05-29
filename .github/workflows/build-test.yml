@@ -15,17 +15,14 @@ jobs:
                     - windows-latest
         steps:
             - uses: actions/checkout@v1
-              with:
-                  submodules: true
             - uses: actions/setup-node@v1
               with:
                   node-version: '12.x'
             - run: |
                   npm install
-                  npm run test
-              name: build and test
+              name: build
             - uses: symbitic/install-cmake@master
-              name: validation test by running get-cmake
+              name: validation test by running install-cmake
             - run: |
                   which cmake
                   cmake --version

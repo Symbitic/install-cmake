@@ -1,5 +1,7 @@
 # [install-cmake](https://github.com/marketplace/actions/install-cmake)
 
+[![Action Status](https://github.com/Symbitic/install-cmake/workflows/build-test/badge.svg)](https://github.com/Symbitic/install-cmake/actions)
+
 Downloads CMake and ninja-build binaries.
 Works for Linux, macOS, and Windows.
 
