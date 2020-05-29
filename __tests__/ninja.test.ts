@@ -13,8 +13,8 @@ describe('get-ninja', () => {
         await io.rmRF(tempDirectory);
         await io.mkdirP(tempDirectory);
         Object.keys(process.env)
-            .filter((key) => key.match(/^INPUT_/))
-            .forEach((key) => {
+            .filter(key => key.match(/^INPUT_/))
+            .forEach(key => {
                 delete process.env[key];
             });
         process.env.INPUT_NINJA = '1.9.0';
@@ -22,7 +22,10 @@ describe('get-ninja', () => {
         process.env.INPUT_DESTINATION = tempDirectory;
         process.env.GITHUB_WORKSPACE = tempDirectory;
         process.env.RUNNER_TEMP = path.join(tempDirectory, 'temp');
-        process.env.RUNNER_TOOL_CACHE = path.join(tempDirectory, 'tempToolCache');
+        process.env.RUNNER_TOOL_CACHE = path.join(
+            tempDirectory,
+            'tempToolCache'
+        );
     });
 
     afterAll(async () => {
@@ -38,7 +41,9 @@ describe('get-ninja', () => {
         expect(ninjaPath).toBeDefined();
         expect(ninjaPath).not.toHaveLength(0);
 
-        const { status } = spawn(ninjaPath, [ '--version' ], { encoding: 'utf8' });
+        const { status } = spawn(ninjaPath, ['--version'], {
+            encoding: 'utf8'
+        });
         expect(status).toBe(0);
     });
 });

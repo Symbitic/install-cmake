@@ -1,19 +1,14 @@
 module.exports = {
     automock: false,
     clearMocks: true,
-    moduleFileExtensions: [ 'js', 'ts' ],
+    moduleFileExtensions: ['js', 'ts'],
     testEnvironment: 'node',
-    testMatch: [ '**/*.test.ts' ],
-    testPathIgnorePatterns: [
-      '<rootDir>/actions/'
-    ],
+    testMatch: ['**/*.test.ts'],
+    testPathIgnorePatterns: ['<rootDir>/actions/'],
     testRunner: 'jest-circus/runner',
-    transformIgnorePatterns: [
-      '<rootDir>/dist/',
-      '<rootDir>/node_modules/'
-    ],
+    transformIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/'],
     transform: {
-      '^.+\\.ts$': 'ts-jest'
+        '^.+\\.ts$': 'ts-jest'
     },
     verbose: true
-}
+};

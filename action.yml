@@ -2,19 +2,19 @@ name: 'install-cmake'
 description: 'GitHub Action to install CMake and ninja-build.'
 author: 'Alex Shaw https://github.com/symbitic'
 inputs:
-  cmake:
-    description: 'Version of CMake to install'
-    default: '3.17.2'
-    required: true
-  ninja:
-    description: 'Version of ninja-build to install'
-    default: '1.9.0'
-    required: true
-  platform:
-    description: 'Override default platform with one of [win, mac, linux]'
+    cmake:
+        description: 'Version of CMake to install'
+        default: '3.17.2'
+        required: true
+    ninja:
+        description: 'Version of ninja-build to install'
+        default: '1.9.0'
+        required: true
+    platform:
+        description: 'Override default platform with one of [win, mac, linux]'
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+    using: 'node12'
+    main: 'dist/index.js'
 branding:
-  icon: 'terminal'
-  color: 'green'
+    icon: 'terminal'
+    color: 'green'

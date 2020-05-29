@@ -13,14 +13,17 @@ describe('get-cmake', () => {
         await io.rmRF(tempDirectory);
         await io.mkdirP(tempDirectory);
         Object.keys(process.env)
-            .filter((key) => key.match(/^INPUT_/))
-            .forEach((key) => {
+            .filter(key => key.match(/^INPUT_/))
+            .forEach(key => {
                 delete process.env[key];
             });
         process.env.INPUT_CMAKE = '3.17.2';
         process.env.GITHUB_WORKSPACE = tempDirectory;
         process.env.RUNNER_TEMP = path.join(tempDirectory, 'temp');
-        process.env.RUNNER_TOOL_CACHE = path.join(tempDirectory, 'tempToolCache');
+        process.env.RUNNER_TOOL_CACHE = path.join(
+            tempDirectory,
+            'tempToolCache'
+        );
     });
 
     afterAll(async () => {
@@ -36,9 +39,10 @@ describe('get-cmake', () => {
         expect(cmakePath).toBeDefined();
         expect(cmakePath).not.toHaveLength(0);
 
-        const { status, error } = spawn(cmakePath, [ '--version' ], { encoding: 'utf8' });
+        const { status, error } = spawn(cmakePath, ['--version'], {
+            encoding: 'utf8'
+        });
         expect(error).toBeUndefined();
         expect(status).toBe(0);
     });
-
 });
