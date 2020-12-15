@@ -1,7 +1,8 @@
 /*
- * This file uses code from <https://github.com/lukka/get-cmake>.
+ * This file uses some code from <https://github.com/lukka/get-cmake>.
  *
- * Copyright Copyright (c) 2020 Luca Cappa.
+ * Copyright (c) 2020 Alex Shaw.
+ * Copyright (c) 2020 Luca Cappa.
  */
 import * as core from '@actions/core';
 import * as fs from 'fs';

@@ -1,7 +1,8 @@
 /*
- * This file uses code from <https://github.com/lukka/get-cmake>.
+ * This file uses some code from <https://github.com/lukka/get-cmake>.
  *
- * Copyright Copyright (c) 2020 Luca Cappa.
+ * Copyright (c) 2020 Alex Shaw.
+ * Copyright (c) 2020 Luca Cappa.
  */
 import * as tools from '@actions/tool-cache';
 import * as core from '@actions/core';
@@ -12,6 +13,7 @@ interface PackageInfo {
     url: string;
     binPath: string;
     extractFunction: {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (url: string, outputPath: string): Promise<string>;
     };
     dropSuffix: string;
