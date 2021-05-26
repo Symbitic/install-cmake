@@ -52,11 +52,7 @@ function getPlatform(platform?: string) {
     }
 }
 
-export async function ninja(): Promise<string> {
-    const version = core.getInput('ninja', {
-        required: true
-    });
-
+export async function ninja(version: string): Promise<string> {
     const platform = getPlatform(core.getInput('platform'));
 
     const url = `https://github.com/ninja-build/ninja/releases/download/v${version}/ninja-${platform}.zip`;

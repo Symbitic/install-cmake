@@ -100,11 +100,7 @@ function getPlatformData(version: string, platform?: string): PackageInfo {
     }
 }
 
-export async function cmake(): Promise<string> {
-    const version = core.getInput('cmake', {
-        required: true
-    });
-
+export async function cmake(version: string): Promise<string> {
     const platform = core.getInput('platform');
     const data = getPlatformData(version, platform);
 

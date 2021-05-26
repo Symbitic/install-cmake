@@ -4,8 +4,18 @@ import { ninja } from './ninja';
 
 export async function main(): Promise<number> {
     try {
-        await cmake();
-        await ninja();
+        const cmakeVersion = core.getInput('cmake', {
+            required: true
+        });
+        if (cmakeVersion !== 'false') {
+            await cmake(cmakeVersion);
+        }
+        const ninjaVersion = core.getInput('ninja', {
+            required: true
+        });
+        if (ninjaVersion !== 'false') {
+            await ninja(ninjaVersion);
+        }
     } catch (err) {
         const errorAsString = (err ?? 'undefined error').toString();
         core.debug('Error: ' + errorAsString);

@@ -24,6 +24,8 @@ Specifying the versions:
         ninja: 1.10.2
 ```
 
+The given version in the above example can be `"false"`, which means the specified tool will not be installed.
+
 Specifying the CPU architecture:
 
 ```yaml

@@ -126,11 +126,8 @@ function getPlatformData(version, platform) {
             throw new Error(`Unsupported platform '${platformStr}'`);
     }
 }
-function cmake() {
+function cmake(version) {
     return __awaiter(this, void 0, void 0, function* () {
-        const version = core.getInput('cmake', {
-            required: true
-        });
         const platform = core.getInput('platform');
         const data = getPlatformData(version, platform);
         // Get an unique output directory name from the URL.
@@ -207,8 +204,18 @@ const ninja_1 = __nccwpck_require__(958);
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield cmake_1.cmake();
-            yield ninja_1.ninja();
+            const cmakeVersion = core.getInput('cmake', {
+                required: true
+            });
+            if (cmakeVersion !== 'false') {
+                yield cmake_1.cmake(cmakeVersion);
+            }
+            const ninjaVersion = core.getInput('ninja', {
+                required: true
+            });
+            if (ninjaVersion !== 'false') {
+                yield ninja_1.ninja(ninjaVersion);
+            }
         }
         catch (err) {
             const errorAsString = (err !== null && err !== void 0 ? err : 'undefined error').toString();
@@ -316,11 +323,8 @@ function getPlatform(platform) {
             throw new Error(`Unsupported platform '${process.platform}'`);
     }
 }
-function ninja() {
+function ninja(version) {
     return __awaiter(this, void 0, void 0, function* () {
-        const version = core.getInput('ninja', {
-            required: true
-        });
         const platform = getPlatform(core.getInput('platform'));
         const url = `https://github.com/ninja-build/ninja/releases/download/v${version}/ninja-${platform}.zip`;
         // Get an unique output directory name from the URL.
