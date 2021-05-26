@@ -5,7 +5,8 @@
         "sourceMap": true,
         "strict": true,
         "rootDir": "./src",
-        "outDir": "./build"
+        "outDir": "./build",
+        "esModuleInterop": true
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "build", "tmp", "**/*.test.ts"]

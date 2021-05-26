@@ -46,7 +46,9 @@
         "@actions/core": "^1.2.6",
         "@actions/exec": "^1.0.3",
         "@actions/io": "^1.0.2",
-        "@actions/tool-cache": "^1.6.1"
+        "@actions/tool-cache": "^1.6.1",
+        "@types/semver": "^7.3.6",
+        "semver": "^7.3.5"
     },
     "devDependencies": {
         "@commitlint/cli": "^11.0.0",
