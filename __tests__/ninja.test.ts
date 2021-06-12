@@ -17,7 +17,7 @@ describe('get-ninja', () => {
             .forEach(key => {
                 delete process.env[key];
             });
-        process.env.INPUT_NINJA = '1.9.0';
+        process.env.INPUT_NINJA = '1.10.2';
         process.env.INPUT_PLATFORM = 'linux';
         process.env.INPUT_DESTINATION = tempDirectory;
         process.env.GITHUB_WORKSPACE = tempDirectory;
@@ -36,7 +36,7 @@ describe('get-ninja', () => {
         }
     }, 100000);
 
-    it('should fetch Ninja 1.9.0', async () => {
+    it('should fetch Ninja 1.10.2', async () => {
         const ninjaPath = await ninja();
         expect(ninjaPath).toBeDefined();
         expect(ninjaPath).not.toHaveLength(0);

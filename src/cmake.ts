@@ -8,6 +8,8 @@ import * as tools from '@actions/tool-cache';
 import * as core from '@actions/core';
 import * as path from 'path';
 import * as fs from 'fs';
+import semverLte from 'semver/functions/lte';
+import semverCoerce from 'semver/functions/coerce';
 
 interface PackageInfo {
     url: string;
@@ -46,43 +48,68 @@ function getOutputPath(subDir: string): string {
 }
 
 function getPlatformData(version: string, platform?: string): PackageInfo {
+    const semVersion = semverCoerce(version) || version;
     const platformStr = platform || process.platform;
+    const arch = core.getInput('architecture') || process.arch;
     switch (platformStr) {
         case 'win':
         case 'win32':
-        case 'win64':
+        case 'win64': {
+            const isOld = semverLte(semVersion, 'v3.19.6');
+            let osArchStr: string;
+            if (['ia32', 'x86', 'i386', 'x32'].includes(arch)) {
+                osArchStr = isOld ? 'win32-x86' : 'windows-i386';
+            } else {
+                osArchStr = isOld ? 'win64-x64' : 'windows-x86_64';
+            }
             return {
                 binPath: 'bin/',
                 dropSuffix: '.zip',
                 extractFunction: tools.extractZip,
-                url: `https://github.com/Kitware/CMake/releases/download/v${version}/cmake-${version}-win64-x64.zip`
+                url: `https://github.com/Kitware/CMake/releases/download/v${version}/cmake-${version}-${osArchStr}.zip`
             };
+        }
         case 'mac':
-        case 'darwin':
+        case 'darwin': {
+            const isOld = semverLte(semVersion, 'v3.19.1');
+            const osArchStr = isOld ? 'Darwin-x86_64' : 'macos-universal';
             return {
                 binPath: 'CMake.app/Contents/bin/',
                 dropSuffix: '.tar.gz',
                 extractFunction: tools.extractTar,
-                url: `https://github.com/Kitware/CMake/releases/download/v${version}/cmake-${version}-Darwin-x86_64.tar.gz`
+                url: `https://github.com/Kitware/CMake/releases/download/v${version}/cmake-${version}-${osArchStr}.tar.gz`
             };
-        case 'linux':
+        }
+        case 'linux': {
+            const isOld = semverLte(semVersion, 'v3.19.8');
+            let osArchStr: string;
+            if (['aarch64'].includes(arch)) {
+                osArchStr = isOld ? 'Linux-aarch64' : 'linux-aarch64';
+            } else {
+                osArchStr = isOld ? 'Linux-x86_64' : 'linux-x86_64';
+            }
             return {
                 binPath: 'bin/',
                 dropSuffix: '.tar.gz',
                 extractFunction: tools.extractTar,
-                url: `https://github.com/Kitware/CMake/releases/download/v${version}/cmake-${version}-Linux-x86_64.tar.gz`
+                url: `https://github.com/Kitware/CMake/releases/download/v${version}/cmake-${version}-${osArchStr}.tar.gz`
             };
+        }
         default:
             throw new Error(`Unsupported platform '${platformStr}'`);
     }
 }
 
-export async function cmake(): Promise<string> {
-    const version = core.getInput('cmake', {
-        required: true
-    });
-
+export async function cmake(version: string): Promise<string> {
     const platform = core.getInput('platform');
+
+    // Restore from cache (if found).
+    const cmakeDir = tools.find('cmake', version);
+    if (cmakeDir) {
+        core.addPath(cmakeDir);
+        return path.join(cmakeDir, platform === 'win' ? 'cmake.exe' : 'cmake');
+    }
+
     const data = getPlatformData(version, platform);
 
     // Get an unique output directory name from the URL.
@@ -96,12 +123,6 @@ export async function cmake(): Promise<string> {
         dirName.replace(data.dropSuffix, ''),
         data.binPath
     );
-
-    const cmakeDir = tools.find('cmake', version);
-    if (cmakeDir) {
-        core.addPath(cmakeDir);
-        return path.join(cmakeDir, platform === 'win' ? 'cmake.exe' : 'cmake');
-    }
 
     if (!fs.existsSync(cmakePath)) {
         await core.group('Download and extract CMake', async () => {

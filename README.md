@@ -14,6 +14,29 @@ Works for Linux, macOS, and Windows.
       uses: symbitic/install-cmake@master
 ```
 
+Specifying the versions:
+
+```yaml
+    - name: Get CMake
+      uses: symbitic/install-cmake@master
+      with:
+        cmake: 3.20.2
+        ninja: 1.10.2
+```
+
+The given version in the above example can be `"false"`, which means the specified tool will not be installed.
+
+Specifying the CPU architecture:
+
+```yaml
+    - name: Get CMake
+      uses: symbitic/install-cmake@master
+      with:
+        cmake: 3.20.2
+        ninja: 1.10.2
+        architecture: i386
+```
+
 ## Developing
 
 Build with `tsc` by running:
@@ -29,7 +52,7 @@ Build, lint, validate, and package for release:
     > npm run pack
 
 Run unit tests:
- 
+
     > npm run test
 
 ## License

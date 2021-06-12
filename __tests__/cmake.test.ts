@@ -17,7 +17,7 @@ describe('get-cmake', () => {
             .forEach(key => {
                 delete process.env[key];
             });
-        process.env.INPUT_CMAKE = '3.17.2';
+        process.env.INPUT_CMAKE = '3.20.2';
         process.env.GITHUB_WORKSPACE = tempDirectory;
         process.env.RUNNER_TEMP = path.join(tempDirectory, 'temp');
         process.env.RUNNER_TOOL_CACHE = path.join(
