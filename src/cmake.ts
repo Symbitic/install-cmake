@@ -102,6 +102,14 @@ function getPlatformData(version: string, platform?: string): PackageInfo {
 
 export async function cmake(version: string): Promise<string> {
     const platform = core.getInput('platform');
+
+    // Restore from cache (if found).
+    const cmakeDir = tools.find('cmake', version);
+    if (cmakeDir) {
+        core.addPath(cmakeDir);
+        return path.join(cmakeDir, platform === 'win' ? 'cmake.exe' : 'cmake');
+    }
+
     const data = getPlatformData(version, platform);
 
     // Get an unique output directory name from the URL.
@@ -115,12 +123,6 @@ export async function cmake(version: string): Promise<string> {
         dirName.replace(data.dropSuffix, ''),
         data.binPath
     );
-
-    const cmakeDir = tools.find('cmake', version);
-    if (cmakeDir) {
-        core.addPath(cmakeDir);
-        return path.join(cmakeDir, platform === 'win' ? 'cmake.exe' : 'cmake');
-    }
 
     if (!fs.existsSync(cmakePath)) {
         await core.group('Download and extract CMake', async () => {

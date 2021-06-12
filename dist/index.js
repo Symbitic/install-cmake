@@ -129,6 +129,12 @@ function getPlatformData(version, platform) {
 function cmake(version) {
     return __awaiter(this, void 0, void 0, function* () {
         const platform = core.getInput('platform');
+        // Restore from cache (if found).
+        const cmakeDir = tools.find('cmake', version);
+        if (cmakeDir) {
+            core.addPath(cmakeDir);
+            return path.join(cmakeDir, platform === 'win' ? 'cmake.exe' : 'cmake');
+        }
         const data = getPlatformData(version, platform);
         // Get an unique output directory name from the URL.
         const key = hashCode(data.url);
@@ -136,11 +142,6 @@ function cmake(version) {
         const { pathname } = new URL(data.url);
         const dirName = path.basename(pathname);
         const outputPath = path.join(cmakePath, dirName.replace(data.dropSuffix, ''), data.binPath);
-        const cmakeDir = tools.find('cmake', version);
-        if (cmakeDir) {
-            core.addPath(cmakeDir);
-            return path.join(cmakeDir, platform === 'win' ? 'cmake.exe' : 'cmake');
-        }
         if (!fs.existsSync(cmakePath)) {
             yield core.group('Download and extract CMake', () => __awaiter(this, void 0, void 0, function* () {
                 const downloaded = yield tools.downloadTool(data.url);
@@ -326,19 +327,19 @@ function getPlatform(platform) {
 function ninja(version) {
     return __awaiter(this, void 0, void 0, function* () {
         const platform = getPlatform(core.getInput('platform'));
-        const url = `https://github.com/ninja-build/ninja/releases/download/v${version}/ninja-${platform}.zip`;
-        // Get an unique output directory name from the URL.
-        const key = hashCode(url);
-        const outputDir = getOutputPath(key);
-        // Build artifact names.
+        // Build artifact name
         const ninjaBin = platform === 'win' ? 'ninja.exe' : 'ninja';
-        const ninjaPath = path.join(outputDir, ninjaBin);
         // Restore from cache (if found).
         const ninjaDir = tools.find('ninja', version);
         if (ninjaDir) {
             core.addPath(ninjaDir);
             return path.join(ninjaDir, ninjaBin);
         }
+        const url = `https://github.com/ninja-build/ninja/releases/download/v${version}/ninja-${platform}.zip`;
+        // Get an unique output directory name from the URL.
+        const key = hashCode(url);
+        const outputDir = getOutputPath(key);
+        const ninjaPath = path.join(outputDir, ninjaBin);
         if (!fs.existsSync(outputDir)) {
             yield core.group('Download and extract ninja-build', () => __awaiter(this, void 0, void 0, function* () {
                 const downloaded = yield tools.downloadTool(url);

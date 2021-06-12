@@ -55,15 +55,8 @@ function getPlatform(platform?: string) {
 export async function ninja(version: string): Promise<string> {
     const platform = getPlatform(core.getInput('platform'));
 
-    const url = `https://github.com/ninja-build/ninja/releases/download/v${version}/ninja-${platform}.zip`;
-
-    // Get an unique output directory name from the URL.
-    const key: string = hashCode(url);
-    const outputDir = getOutputPath(key);
-
-    // Build artifact names.
+    // Build artifact name
     const ninjaBin = platform === 'win' ? 'ninja.exe' : 'ninja';
-    const ninjaPath = path.join(outputDir, ninjaBin);
 
     // Restore from cache (if found).
     const ninjaDir = tools.find('ninja', version);
@@ -71,6 +64,14 @@ export async function ninja(version: string): Promise<string> {
         core.addPath(ninjaDir);
         return path.join(ninjaDir, ninjaBin);
     }
+
+    const url = `https://github.com/ninja-build/ninja/releases/download/v${version}/ninja-${platform}.zip`;
+
+    // Get an unique output directory name from the URL.
+    const key: string = hashCode(url);
+    const outputDir = getOutputPath(key);
+
+    const ninjaPath = path.join(outputDir, ninjaBin);
 
     if (!fs.existsSync(outputDir)) {
         await core.group('Download and extract ninja-build', async () => {
